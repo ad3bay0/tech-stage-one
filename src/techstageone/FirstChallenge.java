@@ -26,22 +26,20 @@ public class FirstChallenge {
 
     public static List<String> getUsernames(int threshold) throws Exception {
 
-        return  retrieveUsernames(OPERATION_DEFAULT,threshold);
+        return retrieveUsernames(OPERATION_DEFAULT, threshold);
     }
-
 
     public static String getUsernameWithHighestCommentCount() throws Exception {
 
         return retriveUsername();
     }
 
-
     public static List<String> getUsernamesSortedByRecordDate(int threshold) throws Exception {
 
-        return retrieveUsernames(OPERATION_SORT,threshold);
+        return retrieveUsernames(OPERATION_SORT, threshold);
     }
 
-    public static List<String> retrieveUsernames(String operation,int threshold) throws Exception {
+    public static List<String> retrieveUsernames(String operation, int threshold) throws Exception {
 
         int numberOfPages = getPages();
         List<String> result = new ArrayList<>();
@@ -51,16 +49,15 @@ public class FirstChallenge {
             IntStream stream = IntStream.rangeClosed(1, numberOfPages).limit(threshold);
             Stream<Map> allData = stream.mapToObj(FirstChallenge::getDataByPage).flatMap(List::stream);
 
-
             switch (operation) {
                 case OPERATION_DEFAULT:
                     result = retrieveUsernames(allData);
                     break;
-                
+
                 case OPERATION_SORT:
                     result = retrieveUsernamesSortedByCreatedDate(allData);
                     break;
-            
+
                 default:
                     break;
             }
@@ -73,7 +70,7 @@ public class FirstChallenge {
 
     public static String retriveUsername() throws Exception {
         int numberOfPages = getPages();
-   
+
         String result = "";
 
         if (numberOfPages > 0) {
@@ -87,26 +84,25 @@ public class FirstChallenge {
 
     }
 
-    public static List<String> retrieveUsernames(Stream<Map> data){
+    public static List<String> retrieveUsernames(Stream<Map> data) {
 
-        return data.map(m->(String)m.get("username")).collect(Collectors.toList());
-
-    }
-
-    public static String retrieveUsernameWithHighestCommentCount(Stream<Map> data){
-
-        Optional<Map> authorObj = data.max(Comparator.comparing(x->(int)x.get("comment_count")));
-
-        return (String)authorObj.get().get("username");
-    }
-
-
-    public static List<String> retrieveUsernamesSortedByCreatedDate(Stream<Map> data){
-
-        return data.sorted(Comparator.comparingInt(x->(int)x.get("created_at"))).map(m->(String)m.get("username")).collect(Collectors.toList());
+        return data.map(m -> (String) m.get("username")).collect(Collectors.toList());
 
     }
 
+    public static String retrieveUsernameWithHighestCommentCount(Stream<Map> data) {
+
+        Optional<Map> authorObj = data.max(Comparator.comparing(x -> (int) x.get("comment_count")));
+
+        return (String) authorObj.get().get("username");
+    }
+
+    public static List<String> retrieveUsernamesSortedByCreatedDate(Stream<Map> data) {
+
+        return data.sorted(Comparator.comparingInt(x -> (int) x.get("created_at"))).map(m -> (String) m.get("username"))
+                .collect(Collectors.toList());
+
+    }
 
     private static int getPages() throws Exception {
         Map result = retreveDataFromUrl(BASE_URL);
