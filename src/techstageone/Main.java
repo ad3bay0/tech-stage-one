@@ -5,6 +5,10 @@ package techstageone;
  */
 public class Main {
     public static void main(String[] args) throws Exception {
-       
+
+        FirstChallenge.getUsernames(2);
+        FirstChallenge.getUsernameWithHighestCommentCount();
+        FirstChallenge.getUsernamesSortedByRecordDate(2);
+          
     }
 }
